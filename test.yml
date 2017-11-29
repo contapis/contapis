@@ -1,0 +1,30 @@
+# workspace:
+#   base: /go
+#   path: src/github.com/drone/envsubst
+
+# clone:
+#   git:
+#     image: plugins/git
+#     depth: 50
+
+name: test
+description: test
+pipeline:
+  build:
+    image: golang:1.7
+    commands:
+      - echo this step should fail
+      - echo secret = $SECRET_shachar
+      - echo foo = $foo
+      - dd if=/dev/urandom bs=10 count=200 | base64
+      - ">&2 echo this goes to stderr"
+      - sleep 10
+      # - exit 1
+  test:
+    image: golang:1.7
+    commands:
+      - echo this step should execute, despite failure
+    # when:
+    #   status: [ failure ]
+
+
